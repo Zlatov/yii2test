@@ -1,0 +1,2 @@
+#!/bin/bash
+mysql -D webhobru_yii -u webhobru_yii -ppersonalA8 < ./procedures.sql
