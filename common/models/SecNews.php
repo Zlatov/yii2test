@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\components\helpers\Text;
 
 /**
  * This is the model class for table "sec_news".
@@ -42,32 +43,11 @@ class SecNews extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if ($this->sid === '') {
-                $this->sid = $this->translit($this->header);
-            }
-            else {
-                $this->sid = $this->translit($this->sid);
-            }
+            $this->sid = Text::sid($this->sid,$this->header);
             return true;
         } else {
             return false;
         }
-    }
-    public function translit($text) {
-        $text = mb_strtolower($text, 'UTF-8');
-        $replace = array(
-            "а"=>"a", "б"=>"b", "в"=>"v", "г"=>"g", "д"=>"d", "е"=>"e", "ё"=>"e", "ж"=>"j", "з"=>"z", "и"=>"i",
-            "й"=>"y", "к"=>"k", "л"=>"l", "м"=>"m", "н"=>"n", "о"=>"o", "п"=>"p", "р"=>"r", "с"=>"s", "т"=>"t",
-            "у"=>"u", "ф"=>"f", "х"=>"h", "ц"=>"c", "ч"=>"ch","ш"=>"sh","щ"=>"sch","ъ"=>"", "ы"=>"y", "ь"=>"",
-            "э"=>"e", "ю"=>"yu", "я"=>"ya", 
-            " "=> "-"
-        );
-        $text = strtr($text,$replace);
-        $text = preg_replace('/[^a-z0-9_-]/', '', $text);
-        $text = preg_replace('/[-]{2,}/', '-', $text);
-        $text = preg_replace('/[_]{2,}/', '_', $text);
-        $text = trim($text, '-_');
-        return $text;
     }
     /**
      * @inheritdoc

@@ -28,14 +28,16 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Панель администрирования',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Главная', 'url' => ['/site/index']],
+        ['label' => 'Новости', 'url' => ['/news']],
+        ['label' => 'Секции новостей', 'url' => ['/sec-news']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
@@ -56,6 +58,11 @@ AppAsset::register($this);
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'homeLink' => [ 
+                      // 'label' => Yii::t('yii', 'Dashboard'),
+                      'label' => 'Главная',
+                      'url' => Yii::$app->homeUrl,
+            ],
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
