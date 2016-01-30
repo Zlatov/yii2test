@@ -23,6 +23,10 @@ $this->title = 'My Yii Application';
             </div>
             <div class="col-lg-3">
                 <h2>Услуги</h2>
+                <p>
+                    <?= Html::a('Услуги', ['service/index'], ['class' => 'btn btn-success']) ?>
+                    <?= Html::a('Секции услуг', ['sec-service/index'], ['class' => 'btn btn-success']) ?>
+                </p>
             </div>
             <div class="col-lg-3">
                 <h2>Страницы</h2>
