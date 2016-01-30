@@ -23,14 +23,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            // [
+            //     'class' => 'yii\grid\SerialColumn',
+            //     'contentOptions' => ['style' => 'max-width:20px;'],
+            // ],
             // ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            [
+                'attribute' => 'id',
+                'contentOptions' => ['style' => 'width:40px;'],
+            ],
+            // [
+            //     'attribute' => 'sid',
+            //     'format' => 'raw',
+            //     'label' => 'Стр. ид.',
+            //     'contentOptions' => ['style' => 'width:100px;'],
+            // ],
             'sid',
             'header',
-            'order',
+            // 'order',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['style' => 'width:70px;'],
+            ],
         ],
     ]); ?>
 
