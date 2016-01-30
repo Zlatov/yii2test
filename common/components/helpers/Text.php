@@ -24,10 +24,10 @@ class Text
 	public static function sid($sid,$header = null)
 	{
         if ($sid === '') {
-            return self::translit($header);
+            return mb_substr(self::translit($header), 0, 80);
         }
         else {
-            return self::translit($sid);
+            return mb_substr(self::translit($sid), 0, 80);
         }
         return '';
 	}
