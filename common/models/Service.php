@@ -32,9 +32,10 @@ class Service extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sid', 'header'], 'required'],
+            [['header'], 'required'],
             [['text'], 'string'],
-            [['order'], 'integer'],
+            [['order'], 'default', 'value'=>'100','when'=> function($model){ return $model->isNewRecord; }],
+            [['order'], 'integer', 'min' => 0, 'max' => 65535,],
             [['sid'], 'string', 'max' => 80],
             [['header'], 'string', 'max' => 255],
             [['sid'], 'unique'],
@@ -70,5 +71,15 @@ class Service extends \yii\db\ActiveRecord
     public function getSecs()
     {
         return $this->hasMany(SecService::className(), ['id' => 'sec'])->viaTable('sec_ser', ['ser' => 'id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->sid = Text::sid($this->sid,$this->header);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
