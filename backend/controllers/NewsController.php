@@ -101,10 +101,6 @@ class NewsController extends Controller
         $model = new News();
         // $sections = SecNews::find()->select(['id','header'])->asArray()->all();
         $sections = SecNews::find()->select(['id','header'])->all();
-        // $a = [];
-        // foreach ($sections as $section) {
-        //     $a[$section['id']] = $section['header'];
-        // }
         $sections = ArrayHelper::map($sections,'id','header');
         // echo "<pre>";
         // var_dump($a);
@@ -114,9 +110,6 @@ class NewsController extends Controller
         ];
         if (isset($sectionid)) {
             $params['options'] = [$sectionid => ['Selected'=>'selected']];
-            // echo "<pre>";
-            // print_r($params);
-            // die;
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
