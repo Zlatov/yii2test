@@ -63,8 +63,11 @@ class ServiceController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $secService = $model->getSecs()->all();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'secService' => $secService,
         ]);
     }
 
@@ -110,12 +113,30 @@ class ServiceController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        //$model->getSectionsId();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $secServiceList = SecService::find()->select(['id','header'])->all();
+        $secServiceList = ArrayHelper::map($secServiceList,'id','header');
+        // или
+        // $secServiceList = SecService::find()->select(['header', 'id'])->indexBy('id')->column();
+
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $transaction = Service::getDb()->beginTransaction();
+            if ($model->save()) {
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                $transaction->rollBack();
+                return $this->render('update', [
+                    'model' => $model,
+                    'secServiceList' => $secServiceList,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'secServiceList' => $secServiceList,
             ]);
         }
     }
