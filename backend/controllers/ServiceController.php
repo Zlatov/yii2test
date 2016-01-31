@@ -3,12 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
+
 use common\models\Service;
+use common\models\SecService;
+
 use backend\models\ServiceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
 /**
  * ServiceController implements the CRUD actions for Service model.
@@ -72,12 +76,27 @@ class ServiceController extends Controller
     public function actionCreate()
     {
         $model = new Service();
+        $secServiceList = SecService::find()->select(['id','header'])->all();
+        $secServiceList = ArrayHelper::map($secServiceList,'id','header');
+        // или
+        // $secServiceList = SecService::find()->select(['header', 'id'])->indexBy('id')->column();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Service::getDb()->beginTransaction();
+            if ($model->save()) {
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                $transaction->rollBack();
+                return $this->render('create', [
+                    'model' => $model,
+                    'secServiceList' => $secServiceList,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'secServiceList' => $secServiceList,
             ]);
         }
     }

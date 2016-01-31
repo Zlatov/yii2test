@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\components\helpers\Text;
 
 /**
  * This is the model class for table "service".
@@ -39,7 +40,14 @@ class Service extends \yii\db\ActiveRecord
             [['sid'], 'string', 'max' => 80],
             [['header'], 'string', 'max' => 255],
             [['sid'], 'unique'],
-            [['header'], 'unique']
+            [['header'], 'unique'],
+            // [['secSers'], 'safe'],
+            // или
+            [['secSers'], function ($attribute, $params) {
+                if (!is_array($this->$attribute)||count($this->$attribute)===0) {
+                    $this->addError($attribute, 'Должна быть указана хотя бы одна секция.');
+                }
+            }, 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
     }
 
@@ -57,6 +65,7 @@ class Service extends \yii\db\ActiveRecord
         ];
     }
 
+    protected $secSers;
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -73,6 +82,18 @@ class Service extends \yii\db\ActiveRecord
         return $this->hasMany(SecService::className(), ['id' => 'sec'])->viaTable('sec_ser', ['ser' => 'id']);
     }
 
+    protected function updateSecSers()
+    {
+        SecSer::deleteAll(['ser' => $this->id]);
+        if (is_array($this->secSers))
+            foreach ($this->secSers as $id) {
+                $secSer = new SecSer();
+                $secSer->ser = $this->id;
+                $secSer->sec = $id;
+                $secSer->save();
+        }
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -81,5 +102,10 @@ class Service extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->updateSecSers();
+        parent::afterSave($insert, $changedAttributes);
     }
 }
