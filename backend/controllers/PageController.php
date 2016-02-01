@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use common\components\helpers\Tree;
 
 /**
  * PageController implements the CRUD actions for Page model.
@@ -33,12 +34,16 @@ class PageController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PageSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $pageList = Page::find()->select(['id','pid','header'])->asArray()->all();
+        $pageList = Tree::level($pageList);
+
+        // $searchModel = new PageSearch();
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            // 'searchModel' => $searchModel,
+            // 'dataProvider' => $dataProvider,
+            'pageList' => $pageList,
         ]);
     }
 
@@ -62,11 +67,18 @@ class PageController extends Controller
     public function actionCreate()
     {
         $model = new Page();
-        $pageList = Page::find()->select(['id','header','pid'])->all();
+        $pageList = Page::find()->select(['id','header','pid'])->asArray()->all();
+
+        // $pageList = Tree::level($pageList);
+        $pageList = Tree::header($pageList);
         $pageList = ArrayHelper::map($pageList,'id','header');
+
         $paramsPageList = [
-            'prompt' => 'Выберите родителя…'
+            'prompt' => 'Эта страница будет родительская',
+            'encode' => false,
+            'size' => 20,
         ];
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -106,9 +118,22 @@ class PageController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if (!$model->delete()) {
+            // echo "<pre>";
+            // print_r($model->getErrors());
+            // die;
+            $errors = $model->getErrors();
+            $pageList = Page::find()->select(['id','pid','header'])->asArray()->all();
+            $pageList = Tree::level($pageList);
+            return $this->render('index', [
+                'pageList' => $pageList,
+                'errors' => $errors,
+            ]);
+        }else{
+            return $this->redirect(['index']);
+        }
 
-        return $this->redirect(['index']);
     }
 
     /**
