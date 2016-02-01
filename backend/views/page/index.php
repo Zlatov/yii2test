@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\components\TreeList;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PageSearch */
@@ -18,25 +19,24 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Создать страницу', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    
+    <?php
+    if (isset($errors)&&is_array($errors)&&count($errors)) {
+        echo '<div class="panel panel-danger">';
+        echo '<div class="panel-heading">Обнаружены ошибки!</div>';
+        echo '<div class="panel-body">';
+        foreach ($errors as $key => $error) {
+            foreach ($error as $errorString) {
+                echo "$errorString";
+            }
+        }
+        echo '</div>';
+        echo '</div>';
+    }
+    ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'pid',
-            'header',
-            'sid',
-            'text:ntext',
-            // 'order',
-            // 'title',
-            // 'desription',
-            // 'keywords',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
+    <?= TreeList::widget([
+        'treeList' => $pageList
     ]); ?>
 
 </div>
