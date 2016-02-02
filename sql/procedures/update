@@ -1,2 +1,3 @@
 #!/bin/bash
-mysql -D webhobru_yii -u webhobru_yii -ppersonalA8 < ./procedures.sql
+bash ./sussess
+mysql -D ${database} -u ${user} -p${password} < ./procedures.sql
