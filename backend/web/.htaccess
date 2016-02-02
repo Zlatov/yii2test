@@ -1,0 +1,15 @@
+# Если mod_rewrite есть на сервере
+<IfModule mod_rewrite.c>
+
+	# Включаем модуль mod_rewrite выполняющий URL преобразования на лету.
+	RewriteEngine on
+
+
+	RewriteCond %{REQUEST_URI} !^
+	RewriteRule ^(.*)$ /$1
+
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^.*$ /index.php
+
+</IfModule>
