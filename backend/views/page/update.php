@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Page */
 
-$this->title = 'Update Page: ' . ' ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Pages', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редактирование страницы: ' . ' ' . $model->header;
+$this->params['breadcrumbs'][] = ['label' => 'Страницы', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->header, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Редактирование страницы';
 ?>
 <div class="page-update">
 
@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'pageList' => $pageList,
+        'paramsPageList' => $paramsPageList,
     ]) ?>
 
 </div>

@@ -2,7 +2,7 @@
 use  yii\helpers\Html;
 ?>
 
-<li><?= $val['header'] ?> 
+<li>#<?= $val['id'] ?> (<?= is_null($val['pid'])?'Null':$val['pid'] ?>) <?= $val['header'] ?> 
 <?= Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 
 	Yii::$app->urlManager->createUrl([Yii::$app->controller->id.'/view','id'=>$val['id']])) ?> 
 <?= Html::a('<span class="glyphicon glyphicon-pencil"></span>', 

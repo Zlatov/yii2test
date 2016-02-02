@@ -87,6 +87,9 @@ class Page extends \yii\db\ActiveRecord
 	public function beforeSave($insert)
 	{
 		if (parent::beforeSave($insert)) {
+			if ($this->pid==='0') {
+				$this->pid = null;
+			}
 			$this->sid = Text::sid($this->sid,$this->header);
 			if ($this->sid === '') {
 				$this->addError('sid', 'Строковый идентификатор не смог создасться из заголовка, измените заголовок.');

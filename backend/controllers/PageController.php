@@ -68,8 +68,6 @@ class PageController extends Controller
     {
         $model = new Page();
         $pageList = Page::find()->select(['id','header','pid'])->asArray()->all();
-
-        // $pageList = Tree::level($pageList);
         $pageList = Tree::header($pageList);
         $pageList = ArrayHelper::map($pageList,'id','header');
 
@@ -101,11 +99,32 @@ class PageController extends Controller
     {
         $model = $this->findModel($id);
 
+        $pageList = Page::find()->select(['id','header','pid'])->where(['not',['id'=>$id]])->asArray()->all();
+        $pageList = Tree::header($pageList);
+        array_unshift($pageList, [
+            'id' => '0',
+            'header'=>'Эта страница будет корневой',
+            'pid' => null,
+            'level' => 0,
+            ]);
+        $pageList = ArrayHelper::map($pageList,'id','header');
+
+        $paramsPageList = [
+            // 'prompt' => 'Эта страница будет корневой', // Нет возможности selected
+            'encode' => false,
+            'size' => 20,
+        ];
+        if (is_null($model->pid)) {
+            $model->pid = '0';
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'pageList' => $pageList,
+                'paramsPageList' => $paramsPageList,
             ]);
         }
     }
