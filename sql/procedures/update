@@ -1,3 +1,0 @@
-#!/bin/bash
-bash ./sussess
-mysql -D ${database} -u ${user} -p${password} < ./procedures.sql
