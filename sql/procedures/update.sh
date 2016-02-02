@@ -1,7 +1,6 @@
 #!/bin/bash
-echo "Reading config...."
-source ./success.sh
+echo "Reading file success.sh..."
 . ./success.sh
 echo "Config for the databasename: $database"
 echo "Execute mysql..."
-mysql -D $database -u $user -p$password < ./procedures.sql
+mysql --database="$database" --user="$user" --password="$password" < ./procedures.sql
