@@ -16,6 +16,28 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
         ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => true,
+            'rules' => [
+                '' => 'page/mainpage',
+
+                // '<action:(.*)>' => 'page/<action>',
+                '<sid:[\w-]+>' => 'page/view',
+
+                // 'news/<sid:\w+>.html' => 'news/view',
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'news/<sid:\w+>',
+                    'route' => 'news/view',
+                    'suffix' => '.html',
+                ],
+
+                'news/<action:update>/<id:\d+>' => 'news/<action>',
+                'news/<action:\w+>' => 'news/<action>',
+            ]
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
