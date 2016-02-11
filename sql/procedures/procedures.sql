@@ -1,8 +1,10 @@
 use `webhobru_yii`;
-drop procedure if exists `news_count_in_sections`;
 
+drop procedure if exists `news_count_in_sections`;
+drop procedure if exists `current_menu`;
 
 delimiter ;;
+
 create procedure `news_count_in_sections`()
 begin
 	select 
@@ -16,6 +18,41 @@ begin
 		`s`.`id`
 	order by
         `s`.`id` asc;
+end ;;
+
+create procedure `current_menu`(in param_sid varchar(80))
+begin
+	select
+		`c`.`id`,
+		`c`.`pid`,
+		`c`.`sid`,
+		`c`.`header`
+	from
+		`page` `p`
+	left join
+		`page` `r` on `r`.`id` = `p`.`pid`
+	left join
+		`page` `c` on if(`r`.`id`, `c`.`pid` = `r`.`id`, `c`.`pid` is null)
+	where
+		`p`.`sid` = param_sid
+
+	union all
+
+	select
+		`c2`.`id`,
+		`c2`.`pid`,
+		`c2`.`sid`,
+		`c2`.`header`
+	from
+		`page` `p`
+	left join
+		`page` `r` on `r`.`id` = `p`.`pid`
+	left join
+		`page` `c` on if(`r`.`id`, `c`.`pid` = `r`.`id`, `c`.`pid` is null)
+	inner join
+		`page` `c2` on `c2`.`pid` = `c`.`id`
+	where
+		`p`.`sid` = param_sid;
 end ;;
 
 
