@@ -4,11 +4,11 @@ namespace common\components\helpers;
 
 class Tree
 {
-	public static function level($array)
+	public static function level(array $array, $pid0 = null)
 	{
 		$result = [];
 		$level = 0;
-		$pid[$level] = null;
+		$pid[$level] = is_null($pid0)?null:(string)$pid0;
 		while ($level >= 0)
 		{
 			if ( $e = each($array) )
