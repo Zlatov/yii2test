@@ -34,11 +34,28 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+
+    $mainMenu = Yii::$app->db->createCommand('call main_menu')->queryAll();
+
+    $menuItems = [];
+    foreach ($mainMenu as $key => $value) {
+    // foreach ($this->params['mainMenu'] as $key => $value) {
+        if (is_null($value['pid'])) {
+            $menuItems[$value['id']] =
+                [
+                    'label' => $value['header'],
+                    'url' => ['page/view','sid'=>$value['sid']],
+                ];
+        }
+        else {
+            $menuItems[$value['pid']]['items'][] =
+                [
+                    'label' => $value['header'],
+                    'url' => ['page/view','sid'=>$value['sid']],
+                ];
+        }
+    }
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];

@@ -2,6 +2,7 @@ use `webhobru_yii`;
 
 drop procedure if exists `news_count_in_sections`;
 drop procedure if exists `current_menu`;
+drop procedure if exists `main_menu`;
 
 delimiter ;;
 
@@ -17,7 +18,31 @@ begin
 	group by
 		`s`.`id`
 	order by
-        `s`.`id` asc;
+		`s`.`id` asc;
+end ;;
+
+create procedure `main_menu`()
+begin
+	select
+		`p`.`id`,
+		`p`.`pid`,
+		`p`.`sid`,
+		`p`.`header`
+	from
+		`page` `p`
+	where
+		`p`.`pid` is null
+
+	union
+
+	select
+		`c`.`id`,
+		`c`.`pid`,
+		`c`.`sid`,
+		`c`.`header`
+	from `page` `p`
+	inner join `page` `c` on `c`.`pid` = p.id
+	where `p`.`pid` is null;
 end ;;
 
 create procedure `current_menu`(in param_sid varchar(80))
