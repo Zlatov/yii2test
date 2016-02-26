@@ -23,8 +23,10 @@ return [
             'rules' => [
                 '' => 'page/mainpage',
 
-                // '<action:(.*)>' => 'page/<action>',
-                '<sid:[\w-]+>' => 'page/view',
+                'user/signup' => 'site/signup',
+                'user/logout' => 'site/logout',
+                'user/login' => 'site/login',
+                'user/request-password-reset' => 'site/request-password-reset',
 
                 // 'news/<sid:\w+>.html' => 'news/view',
                 [
@@ -33,9 +35,15 @@ return [
                     'route' => 'news/view',
                     'suffix' => '.html',
                 ],
-
+                'news/<page:\d+>' => 'news/list',
                 'news/<action:update>/<id:\d+>' => 'news/<action>',
                 'news/<action:\w+>' => 'news/<action>',
+                'news' => 'news/list',
+
+
+                // '<action:(.*)>' => 'page/<action>',
+                '<sid:[\w-]+>' => 'page/view',
+
             ]
         ],
         'log' => [
