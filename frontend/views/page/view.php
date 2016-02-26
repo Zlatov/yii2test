@@ -2,6 +2,19 @@
 
 use common\components\ztree\Ztree;
 
+end($pages_branch);
+$endkey = key($pages_branch);
+foreach ($pages_branch as $key => $value) {
+	if ($key!==$endkey)
+	{
+		$this->params['breadcrumbs'][] = ['label' => $value['header'], 'url' => ['page/view', 'sid' => $value['sid']]];
+	}
+	else
+	{
+		$this->params['breadcrumbs'][] = ['label' => $value['header']];
+	}
+}
+
 ?>
 
 <h1><?= $model->header ?></h1>
