@@ -10,9 +10,6 @@ use  yii\helpers\Url;
 
 <?php 
 
-// echo "<pre>";
-// var_dump($ztree);
-// die;
 
 foreach ($ztree as $key => $val) {
 	
@@ -20,12 +17,12 @@ foreach ($ztree as $key => $val) {
 		if ((isset($ztree[$key + 1])) && ($ztree[$key + 1]['level'] > $val['level'])) {
 ?>
 <div class="panel-heading">
-<a href="<?= Url::to(['page/view','sid'=>$val['sid']]) ?>">
+<a href="<?= Url::to(['page/view','sid'=>$val['sid']]) ?>"<?=($val['id']==$current_id)?" class=\"text-danger\"":''?>>
 <span class="pull-right" data-toggle="collapse" data-parent="#accordionZtree" href="#collapse<?= $val['id'] ?>"><span class="caret"></span></span>
 <?= $val['header'] ?> 
 </a>
 </div>
-<div class="panel-collapse collapse" id="collapse<?= $val['id'] ?>">
+<div class="panel-collapse<?=($val['id']==$current_id)?"":' collapse'?>" id="collapse<?= $val['id'] ?>">
 <div class="list-group">
 <?php
 
@@ -61,24 +58,6 @@ foreach ($ztree as $key => $val) {
 
 }
 
-
-			// $result.= $this->render('lia',[
-			// 	'val'=>$val,
-			// 	'enableDel'=>((isset($this->ztree[$key + 1])) && ($this->ztree[$key + 1]['level'] > $val['level']))?false:true,
-			// ]);
-
-			// if ((isset($this->ztree[$key + 1])) && ($this->ztree[$key + 1]['level'] > $val['level']))
-			// 	$result.= '<ul>';
-
-			// if ((isset($this->ztree[$key + 1])) && ($this->ztree[$key + 1]['level'] == $val['level'])) {
-			// 	$result.= '</li>';
-			// }
-
-			// if ((isset($this->ztree[$key + 1])) && ($this->ztree[$key + 1]['level'] < $val['level']))
-			// 	$result.= str_repeat('</li>'.'</ul>', $val['level'] - $this->ztree[$key + 1]['level']);
-
-			// if (!isset($this->ztree[$key + 1]))
-			// 	$result.= '</li>'.str_repeat('</ul>'.'</li>', $val['level']);
 ?>
 
 	</div>
