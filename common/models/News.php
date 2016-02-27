@@ -5,6 +5,7 @@ namespace common\models;
 
 use Yii;
 use common\components\helpers\Text;
+use common\components\helpers\ToText;
 
 
 
@@ -23,6 +24,8 @@ use common\components\helpers\Text;
  */
 class News extends \yii\db\ActiveRecord
 {
+    use ToText;
+    
     /**
      * @inheritdoc
      */
