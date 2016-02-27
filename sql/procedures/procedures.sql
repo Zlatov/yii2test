@@ -23,35 +23,42 @@ end ;;
 
 create procedure `main_menu`()
 begin
-	select
-		`p`.`id`,
-		`p`.`pid`,
-		`p`.`sid`,
-		`p`.`header`
-	from
-		`page` `p`
-	where
-		`p`.`pid` is null
-
+	(
+		select
+			`p`.`id`,
+			`p`.`pid`,
+			`p`.`sid`,
+			`p`.`header`,
+			`p`.`order`
+		from
+			`page` `p`
+		where
+			`p`.`pid` is null
+	)
 	union
-
-	select
-		`c`.`id`,
-		`c`.`pid`,
-		`c`.`sid`,
-		`c`.`header`
-	from `page` `p`
-	inner join `page` `c` on `c`.`pid` = p.id
-	where `p`.`pid` is null;
+	(
+		select
+			`c`.`id`,
+			`c`.`pid`,
+			`c`.`sid`,
+			`c`.`header`,
+            `c`.`order`
+		from `page` `p`
+		inner join `page` `c` on `c`.`pid` = p.id
+		where `p`.`pid` is null
+	)
+    order by `order` asc, `id` asc;
 end ;;
 
 create procedure `current_menu`(in param_sid varchar(80))
 begin
+	(
 	select
 		`c`.`id`,
 		`c`.`pid`,
 		`c`.`sid`,
-		`c`.`header`
+		`c`.`header`,
+        `c`.`order`
 	from
 		`page` `p`
 	left join
@@ -60,14 +67,15 @@ begin
 		`page` `c` on if(`r`.`id`, `c`.`pid` = `r`.`id`, `c`.`pid` is null)
 	where
 		`p`.`sid` = param_sid
-
+	)
 	union all
-
+	(
 	select
 		`c2`.`id`,
 		`c2`.`pid`,
 		`c2`.`sid`,
-		`c2`.`header`
+		`c2`.`header`,
+        `c2`.`order`
 	from
 		`page` `p`
 	left join
@@ -77,7 +85,11 @@ begin
 	inner join
 		`page` `c2` on `c2`.`pid` = `c`.`id`
 	where
-		`p`.`sid` = param_sid;
+		`p`.`sid` = param_sid
+	)
+	order by
+		`order` asc,
+        `id` asc;
 end ;;
 
 
