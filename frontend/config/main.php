@@ -36,8 +36,10 @@ return [
                     'suffix' => '.html',
                 ],
                 'news/<page:\d+>' => 'news/list',
-                'news/<action:update>/<id:\d+>' => 'news/<action>',
-                'news/<action:\w+>' => 'news/<action>',
+                'news/<section:[\w-]+>' => 'news/list',
+                'news/<section:[\w-]+>/<page:\d+>' => 'news/list',
+                // 'news/<action:update>/<id:\d+>' => 'news/<action>',
+                // 'news/<action:\w+>' => 'news/<action>',
                 'news' => 'news/list',
 
 
