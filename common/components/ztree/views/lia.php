@@ -31,7 +31,7 @@ foreach ($ztree as $key => $val) {
 		{
 ?>
 <div class="panel-heading">
-<a href="<?= Url::to(['page/view','sid'=>$val['sid']]) ?>">
+<a href="<?= Url::to(['page/view','sid'=>$val['sid']]) ?>"<?=($val['id']==$current_id)?" class=\"text-danger\"":''?>>
 <?= $val['header'] ?>
 </a>
 </div>
