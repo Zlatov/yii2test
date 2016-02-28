@@ -2,9 +2,9 @@
 
 use common\components\ztree\Ztree;
 
-end($pages_branch);
-$endkey = key($pages_branch);
-foreach ($pages_branch as $key => $value) {
+end($branch);
+$endkey = key($branch);
+foreach ($branch as $key => $value) {
 	if ($key!==$endkey)
 	{
 		$this->params['breadcrumbs'][] = ['label' => $value['header'], 'url' => ['page/view', 'sid' => $value['sid']]];

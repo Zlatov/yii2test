@@ -19,14 +19,13 @@ class PageController extends Controller
 	{
 		$model = Page::find()->where(['sid'=>$sid])->one();
 		$models = Page::find()->select(['id','pid','sid','header'])->asArray()->indexBy('id')->all();
-		$pages_branch = [];
 		$mode = $models[$model->id];
-		$pages_branch[] = $mode;
+		$branch[] = $mode;
 		while (!is_null($mode['pid'])) {
 			$mode = $models[$mode['pid']];
-			$pages_branch[] = $mode;
+			$branch[] = $mode;
 		}
-		krsort($pages_branch);
+		krsort($branch);
 		$db = Yii::$app->db;
 		$current_menu = $db->createCommand('call current_menu(:sid)')
 			->bindValue(':sid',$model->sid)
@@ -35,7 +34,7 @@ class PageController extends Controller
 		return $this->render('view', [
 			'model' => $model,
 			'current_menu' => $current_menu,
-			'pages_branch' => $pages_branch,
+			'branch' => $branch,
 		]);
 	}
 }
