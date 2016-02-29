@@ -64,6 +64,39 @@ return [
                     'suffix' => '/',
                 ],
 
+
+                // service
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'service/<sid:[\w-]+>',
+                    'route' => 'service/view',
+                    'suffix' => '.html',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'service/<page:\d+>',
+                    'route' => 'service/list',
+                    'suffix' => '/',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'service/<section:[\w-]+>',
+                    'route' => 'service/list',
+                    'suffix' => '/',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'service/<section:[\w-]+>/<page:\d+>',
+                    'route' => 'service/list',
+                    'suffix' => '/',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'service',
+                    'route' => 'service/list',
+                    'suffix' => '/',
+                ],
+
                 //page
                 [
                     'class' => 'yii\web\UrlRule',
