@@ -22,16 +22,16 @@ return [
             'enableStrictParsing' => true,
             'rules' => [
 
-                // mainpage
+                // MainPage
                 '' => 'page/mainpage',
 
-                // site
+                // Site
                 'user/signup' => 'site/signup',
                 'user/logout' => 'site/logout',
                 'user/login' => 'site/login',
                 'user/request-password-reset' => 'site/request-password-reset',
 
-                // news
+                // News
                 // 'news/<sid:\w+>.html' => 'news/view',
                 [
                     'class' => 'yii\web\UrlRule',
@@ -65,7 +65,7 @@ return [
                 ],
 
 
-                // service
+                // Service
                 [
                     'class' => 'yii\web\UrlRule',
                     'pattern' => 'service/<sid:[\w-]+>',
@@ -97,7 +97,33 @@ return [
                     'suffix' => '/',
                 ],
 
-                //page
+                // Product
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'products',
+                    'route' => 'product/index',
+                    'suffix' => '/',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'products/<category:[\w-]+>',
+                    'route' => 'product/list',
+                    'suffix' => '/',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'products/<category:[\w-]+>/<page:\d+>',
+                    'route' => 'product/list',
+                    'suffix' => '/',
+                ],
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'products/<category:[\w-]+>/<id:\d+>',
+                    'route' => 'product/view',
+                    'suffix' => '.html',
+                ],
+
+                // Page
                 [
                     'class' => 'yii\web\UrlRule',
                     'pattern' => '<sid:[\w-]+>',
