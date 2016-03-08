@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\components\helpers\Text;
+use common\components\TreeBranch;
 
 /**
  * This is the model class for table "page".
@@ -23,6 +24,7 @@ use common\components\helpers\Text;
  */
 class Page extends \yii\db\ActiveRecord
 {
+	use TreeBranch;
 	/**
 	 * @inheritdoc
 	 */
