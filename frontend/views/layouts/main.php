@@ -57,13 +57,30 @@ AppAsset::register($this);
     }
 
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
-            'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-            'url' => ['/site/logout'],
-            'linkOptions' => ['data-method' => 'post']
+            'label' => 'Панель пользователя (' . Yii::$app->user->identity->username . ')',
+            'items' => [
+                [
+                    'label' => 'Профиль пользователя',
+                    'url' => ['/site/about'],
+                ],
+                [
+                    'label' => 'Обратная связь',
+                    'url' => ['/site/contact'],
+                ],
+                [
+                    'label' => 'Сброс пароля',
+                    'url' => ['/site/request-password-reset'],
+                ],
+                [
+                    'label' => 'Выход',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post']
+                ],
+            ]
         ];
     }
     echo Nav::widget([

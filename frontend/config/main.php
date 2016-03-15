@@ -15,6 +15,7 @@ return [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
+            // 'loginUrl' => ['site/login'],
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -25,11 +26,20 @@ return [
                 // MainPage
                 '' => 'page/mainpage',
 
-                // Site
+                // Site (User)
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'user',
+                    'route' => 'site/index',
+                    'suffix' => '/',
+                ],
                 'user/signup' => 'site/signup',
                 'user/logout' => 'site/logout',
                 'user/login' => 'site/login',
+                'user/about' => 'site/about',
+                'user/contact' => 'site/contact',
                 'user/request-password-reset' => 'site/request-password-reset',
+                'user/reset-password' => 'site/reset-password',
 
                 // News
                 // 'news/<sid:\w+>.html' => 'news/view',

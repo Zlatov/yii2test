@@ -11,6 +11,13 @@ class PasswordResetRequestForm extends Model
 {
     public $email;
 
+    public function attributeLabels()
+    {
+        return [
+            'email' => 'Адрес электронной почты',
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -23,7 +30,7 @@ class PasswordResetRequestForm extends Model
             ['email', 'exist',
                 'targetClass' => '\common\models\User',
                 'filter' => ['status' => User::STATUS_ACTIVE],
-                'message' => 'There is no user with such email.'
+                'message' => 'Нет ни одного пользователя с таким адресом электронной почты.'
             ],
         ];
     }
