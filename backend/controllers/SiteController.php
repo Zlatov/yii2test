@@ -65,7 +65,8 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        // Доступ в админку запрещен не RBAC, а простой проверкой поля role в таблице БД (смотри глубже в ->loginAdmin())
+        if ($model->load(Yii::$app->request->post()) && $model->loginAdmin()) {
             return $this->goBack();
         } else {
             return $this->render('login', [

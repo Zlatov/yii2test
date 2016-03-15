@@ -15,6 +15,15 @@ class LoginForm extends Model
 
     private $_user;
 
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Имя пользователя (login)',
+            'password' => 'Пароль',
+            'rememberMe' => 'Запомнить меня',
+        ];
+    }
+
 
     /**
      * @inheritdoc
@@ -62,6 +71,15 @@ class LoginForm extends Model
         }
     }
 
+    public function loginAdmin()
+    {
+        if ($this->validate() && User::isUserAdmin($this->username)) {
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            return false;
+        }
+    }
+    
     /**
      * Finds user by [[username]]
      *
