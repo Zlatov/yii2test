@@ -3,13 +3,56 @@ namespace frontend\controllers;
 
 use yii\web\Controller;
 use yii\data\Pagination;
+use common\models\User;
 use common\models\Page;
 use common\models\Product;
 use common\models\Fish;
+use yii\filters\AccessControl;
 use Yii;
 
 class ProductController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                // 'only' => ['view'],
+                'rules' => [
+                    // [
+                    //     'actions' => ['index'],
+                    //     'allow' => true,
+                    //     'roles' => ['user'],
+                    // ],
+                    // [
+                    //     'actions' => ['index', 'list'],
+                    //     'allow' => true,
+                    //     'roles' => ['moder'],
+                    // ],
+                    // [
+                    //     'allow' => true,
+                    //     'roles' => ['admin'],
+                    // ],
+                    [
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // [
+                    //     'actions' => ['view'],
+                    //     'allow' => true,
+                    //     'roles' => ['moder'],
+                    //     // 'matchCallback' => function ($rule, $action) {
+                    //     //     return User::isUserAdmin(Yii::$app->user->identity->username);
+                    //     // }
+                    // ],
+                ],
+            ],
+        ];
+    }
 	
 	public function actionIndex()
 	{

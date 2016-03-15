@@ -12,6 +12,16 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'components' => [
+        'user' => [
+            'class' => 'yii\web\User',
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => false,
+            'enableSession' => false,
+        ],
+        // 'authManager' => [
+        //     'class' => 'yii\rbac\PhpManager',
+        //     //'deafultRoles' => ['guest'],
+        // ],
         'log' => [
             'targets' => [
                 [
