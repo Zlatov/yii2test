@@ -3,6 +3,68 @@ namespace common\components\helpers;
 
 class Text
 {
+	private static $months = [
+		1 => 'января',
+		2 => 'февраля',
+		3 => 'марта',
+		4 => 'апреля',
+		5 => 'мая',
+		6 => 'июня',
+		7 => 'июля',
+		8 => 'августа',
+		9 => 'сентября',
+		10 => 'октября',
+		11 => 'ноября',
+		12 => 'декабря',
+	];
+
+	/* 
+	* Возвращает:
+	* "сегодня в 19:31" или
+	* "14 апреля в 19:31" или
+	* "14 апреля 2016 года в 19:31"
+	*/
+	public static function tsToStr($stringTimeStamp = null)
+	{
+		if (is_null($stringTimeStamp)) return '';
+		$ts = strtotime($stringTimeStamp);
+		foreach (str_split('YmdHis') as $e => $ch)
+			if (date($ch,$ts)!==date($ch)) {
+				switch ($e) {
+					case 0:
+						// Ничего не совпало
+						// 16 декабря 2015 года, в 17:30:31
+						return date('j') . ' ' . self::$months[date('n',$ts)] . ' ' . date('Y',$ts) . ' года, в ' . date('H:i:s',$ts);
+					case 1:
+						// Совпал только год
+					case 2:
+						// Совпали год месяц
+						// 16 декабря, в 17:30:31
+						return date('j') . ' ' . self::$months[date('n',$ts)] . ', в ' . date('H:i:s',$ts);
+					case 3:
+						// Совпали год месяц день
+					case 4:
+						// Совпали год месяц день час
+						// сегодня в 17:30:31
+						return 'сегодня в ' . date('H:i:s',$ts);
+					case 5:
+						// Совпали год месяц день час минута
+						// 10 секунд назад
+						return sprintf('%d %s назад',time()-$ts, self::declension(time()-$ts,'секунд секунда секунды'));
+				}
+				break;
+			} else {
+				continue;
+			}
+		return 'сейчас';
+
+		$return = (($year===$thisYear)?'':$year) . ' ' . date('j',$ts) . ' ' . $this->ttMonth[date('n',$ts)];
+
+		// $return = date('Y',)
+		// $this->created_at;
+		return $return;
+	}
+
 	public static function translit($text)
 	{
         $text = mb_strtolower($text, 'UTF-8');
