@@ -9,50 +9,52 @@ use common\models\Product;
 use common\models\Fish;
 use yii\filters\AccessControl;
 use Yii;
+use frontend\models\BuyForm;
+
 
 class ProductController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                // 'only' => ['view'],
-                'rules' => [
-                    // [
-                    //     'actions' => ['index'],
-                    //     'allow' => true,
-                    //     'roles' => ['user'],
-                    // ],
-                    // [
-                    //     'actions' => ['index', 'list'],
-                    //     'allow' => true,
-                    //     'roles' => ['moder'],
-                    // ],
-                    // [
-                    //     'allow' => true,
-                    //     'roles' => ['admin'],
-                    // ],
-                    [
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    // [
-                    //     'actions' => ['view'],
-                    //     'allow' => true,
-                    //     'roles' => ['moder'],
-                    //     // 'matchCallback' => function ($rule, $action) {
-                    //     //     return User::isUserAdmin(Yii::$app->user->identity->username);
-                    //     // }
-                    // ],
-                ],
-            ],
-        ];
-    }
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				// 'only' => ['view'],
+				'rules' => [
+					// [
+					//     'actions' => ['index'],
+					//     'allow' => true,
+					//     'roles' => ['user'],
+					// ],
+					// [
+					//     'actions' => ['index', 'list'],
+					//     'allow' => true,
+					//     'roles' => ['moder'],
+					// ],
+					// [
+					//     'allow' => true,
+					//     'roles' => ['admin'],
+					// ],
+					[
+						'allow' => true,
+						'roles' => ['?'],
+					],
+					[
+						'allow' => true,
+						'roles' => ['@'],
+					],
+					// [
+					//     'actions' => ['view'],
+					//     'allow' => true,
+					//     'roles' => ['moder'],
+					//     // 'matchCallback' => function ($rule, $action) {
+					//     //     return User::isUserAdmin(Yii::$app->user->identity->username);
+					//     // }
+					// ],
+				],
+			],
+		];
+	}
 	
 	public function actionIndex()
 	{
@@ -173,7 +175,47 @@ class ProductController extends Controller
 		$breadcrumbsBranch[] = ['header' => $product['category_header'], 'sid' => $product['category_sid']];
 		$breadcrumbsBranch[] = ['header' => htmlspecialchars_decode($product['header'])];
 
+
+		$buyForm = new BuyForm();
+		if (Yii::$app->request->isPost)
+		{
+			if (Yii::$app->request->post('delete') !== null)
+			{
+				echo "<pre>";
+				print_r($_POST);
+				echo "</pre>";
+				die();
+				$result = Yii::$app->db->createCommand('call basket_delete(:user_id,:product_id);')
+					->bindValue(':user_id', Yii::$app->user->identity->id)
+					->bindValue(':product_id', $product['id'])
+					->execute();
+			}
+			else
+			{
+				$buyForm->load(Yii::$app->request->post());
+				if ($buyForm->validate()) {
+					$result = Yii::$app->db->createCommand('call basket_insert(:user_id,:product_id,:count);')
+						->bindValue(':user_id', Yii::$app->user->identity->id)
+						->bindValue(':product_id', $product['id'])
+						->bindValue(':count', $buyForm->count)
+						->execute();
+				} else {
+					$errors = $model->errors;
+				}
+			}
+		}
+		$count = Yii::$app->db->createCommand('call basket_count(:user_id,:product_id);')
+			->bindValue(':user_id', Yii::$app->user->identity->id)
+			->bindValue(':product_id', $product['id'])
+			->queryOne();
+
+		$buyForm->user_id = Yii::$app->user->identity->id;
+		$buyForm->product_id = $product['id'];
+		$buyForm->count = 1;
+
 		return $this->render(Yii::$app->request->get('category'), [
+			'count' => $count['count'],
+			'buyForm' => $buyForm,
 			'product' => $product,
 			'breadcrumbsBranch' => $breadcrumbsBranch,
 		]);

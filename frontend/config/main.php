@@ -33,6 +33,8 @@ return [
                     'route' => 'site/index',
                     'suffix' => '/',
                 ],
+                'user/basket' => 'site/basket',
+                'user/buy' => 'site/buy',
                 'user/signup' => 'site/signup',
                 'user/logout' => 'site/logout',
                 'user/login' => 'site/login',
@@ -142,6 +144,9 @@ return [
                 ],
 
             ]
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

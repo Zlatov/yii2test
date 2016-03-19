@@ -13,6 +13,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\User;
+use frontend\models\BuyForm;
 
 /**
  * Site controller
@@ -149,6 +150,7 @@ class SiteController extends Controller
     {
         $identity = Yii::$app->user->identity;
         return $this->render('about', [
+            'time' => time(),
             'identity' => $identity,
         ]);
     }
@@ -221,6 +223,78 @@ class SiteController extends Controller
 
         return $this->render('resetPassword', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionBasket()
+    {
+        if (Yii::$app->request->isPost)
+        {
+            $buyForm = new BuyForm();
+            if (Yii::$app->request->post('delete') !== null)
+            {
+                if ($buyForm->load(Yii::$app->request->post()) && $buyForm->validate()) {
+                    $result = Yii::$app->db->createCommand('call basket_delete(:user_id,:product_id);')
+                        ->bindValue(':user_id', Yii::$app->user->identity->id)
+                        ->bindValue(':product_id', $buyForm->product_id)
+                        ->execute();
+                } else {
+                    $errors = $buyForm->errors;
+                }
+            }
+            else
+            {
+                if ($buyForm->load(Yii::$app->request->post()) && $buyForm->validate()) {
+                    $result = Yii::$app->db->createCommand('call basket_update(:user_id,:product_id,:count);')
+                        ->bindValue(':user_id', Yii::$app->user->identity->id)
+                        ->bindValue(':product_id', $buyForm->product_id)
+                        ->bindValue(':count', $buyForm->count)
+                        ->execute();
+                } else {
+                    $errors = $buyForm->errors;
+                }
+            }
+        }
+        $basket = Yii::$app->db->createCommand('call basket_list(:user_id)')
+            ->bindValue(':user_id',Yii::$app->user->identity->id)
+            ->queryAll();
+        return $this->render( 'basket', [
+            'basket' => $basket,
+        ]);
+    }
+
+    public function actionBuy()
+    {
+        if (Yii::$app->request->isPost)
+        {
+            if ((Yii::$app->request->post('buy') !== null) && (Yii::$app->request->post('user_id') === Yii::$app->user->identity->id))
+            {
+                $basket = Yii::$app->db->createCommand('call basket_list(:user_id)')
+                    ->bindValue(':user_id',Yii::$app->user->identity->id)
+                    ->queryAll();
+                if (count($basket))
+                {
+                    $result = Yii::$app->db->createCommand('call buy_insert(:user_id);')
+                        ->bindValue(':user_id', Yii::$app->user->identity->id)
+                        ->execute();
+                    Yii::$app->mailer->compose()
+                        ->setFrom('noreply@yii.zlatov.net')
+                        ->setTo(Yii::$app->user->identity->email)
+                        ->setSubject('Покупка')
+                        ->setTextBody('Текст сообщения')
+                        ->setHtmlBody('<b>текст сообщения в формате HTML</b>')
+                        ->send();
+                }
+            }
+            else
+            {
+            }
+        }
+        $buyList = Yii::$app->db->createCommand('call buy_list(:user_id)')
+            ->bindValue(':user_id',Yii::$app->user->identity->id)
+            ->queryAll();
+        return $this->render( 'buy', [
+            'buyList' => $buyList,
         ]);
     }
 }

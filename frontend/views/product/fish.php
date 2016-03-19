@@ -1,4 +1,7 @@
 <?php
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use common\components\helpers\Text;
 
 end($breadcrumbsBranch);
 $endkey = key($breadcrumbsBranch);
@@ -50,3 +53,19 @@ foreach ($breadcrumbsBranch as $key => $value) {
 	</div>
 </div>
 <pre><?= htmlentities($product['fish_content']) ?></pre>
+
+<?php $form = ActiveForm::begin(['id' => 'buy-form', 'options' => ['class' => 'form-inline'],]) ?>
+	<?= $form->field($buyForm, 'product_id')->hiddenInput()->label(false, ['style'=>'display:none']) ?>
+	<?= $form->field($buyForm, 'user_id')->hiddenInput()->label(false, ['style'=>'display:none']) ?>
+	<?= $form->field($buyForm, 'count')->input('number', ['size' => 2,'min' => 1,'max' => 99]) ?>
+	<?= Html::beginTag('div', ['class' => 'form-group']) ?>
+		<?= Html::submitButton('добавить в корзину', ['class' => 'btn btn-success']) ?>
+		<?= Html::tag('div', null, ['class' => 'help-block']) ?>
+	<?= Html::endTag('div') ?>
+	<?= Html::beginTag('div', ['class' => 'form-group']) ?>
+		<?= Html::submitButton('Удалить этот товар из корзины', ['class' => 'btn btn-primary', 'name'=>'delete']) ?>
+		<?= Html::tag('div', null, ['class' => 'help-block']) ?>
+	<?= Html::endTag('div') ?>
+<?php ActiveForm::end() ?>
+
+<p>В корзине <?= $count ?> <?= Text::declension($count,'таких такой таких') ?> <?= Text::declension($count,'товаров товар товара') ?>.</p>

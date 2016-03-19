@@ -64,6 +64,14 @@ AppAsset::register($this);
             'label' => 'Панель пользователя (' . Yii::$app->user->identity->username . ')',
             'items' => [
                 [
+                    'label' => 'Корзина',
+                    'url' => ['/site/basket'],
+                ],
+                [
+                    'label' => 'Покупки',
+                    'url' => ['/site/buy'],
+                ],
+                [
                     'label' => 'Профиль пользователя',
                     'url' => ['/site/about'],
                 ],
