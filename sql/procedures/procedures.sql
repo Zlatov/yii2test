@@ -11,8 +11,132 @@ drop procedure if exists `product_view_fish`;
 drop procedure if exists `product_view_quote`;
 drop procedure if exists `product_list_fish`;
 drop procedure if exists `product_list_quote`;
+drop procedure if exists `basket_count`;
+drop procedure if exists `basket_insert`;
+drop procedure if exists `basket_delete`;
+drop procedure if exists `basket_list`;
+drop procedure if exists `basket_update`;
+drop procedure if exists `buy_insert`;
+drop procedure if exists `buy_list`;
 
 delimiter ;;
+
+create procedure `buy_insert`(in param_userid int)
+begin
+
+	declare exit handler for sqlexception 
+    begin
+		rollback;
+    end;
+
+    start transaction;
+
+		insert into
+			`trade` (`user_id`)
+		values
+			(param_userid);
+		
+		insert into
+			`check` (`trade_id`, `product_id`, `count`, `full_price`)
+		select
+			last_insert_id() as `trade_id`,
+			`b`.`product_id` as `product_id`,
+			`b`.`count` as `count`,
+			`p`.`price` * `b`.`count` as `full_price`
+		from
+			`basket` `b`
+		inner join
+			`product` `p` on `p`.`id` = `b`.`product_id`
+		where
+			`b`.`user_id` = param_userid;
+            
+		delete from `basket` where user_id = param_userid;
+
+	commit;
+end;;
+
+create procedure `buy_list`(in param_userid int)
+begin
+	select
+		`t`.`id`,
+		`t`.`ts` as `trade_ts`,
+		count(c.product_id) as `count_product`,
+		sum(c.count) as `count_units`,
+        sum(c.full_price) as `total_price`
+	from
+		`trade` `t`
+	inner join
+		`check` `c` on `c`.`trade_id` = `t`.`id`
+	where
+		`t`.`user_id` = param_userid
+	group by
+		`t`.`id`;
+end;;
+
+create procedure `basket_list`(in param_userid int)
+begin
+	select
+        b.count as `basket_count`,
+        p.id as `product_id`,
+        p.header as `product_header`,
+        p.price as `product_price`,
+        c.sid as `category_sid`,
+        c.header as `category_header`,
+        p.price * b.count as `price_sum`
+    from
+		`user` `u`
+	inner join
+		`basket` `b` on `b`.`user_id` = `u`.`id`
+	inner join
+		`product` `p` on `p`.`id` = `b`.`product_id`
+	inner join
+		`category` `c` on `c`.`id` = `p`.`category_id`
+	where 
+		`u`.`id` = param_userid;
+end;;
+
+create procedure `basket_delete`(in param_userid int, in param_productid int)
+begin
+	delete from 
+		`basket`
+	where 
+		`basket`.`user_id` = param_userid
+        and `basket`.`product_id` = param_productid;
+end;;
+
+create procedure `basket_insert`(in param_userid int, in param_productid int, in param_count int)
+begin
+	insert into
+		`basket`(`user_id`,`product_id`,`count`)
+	values
+		(param_userid, param_productid, param_count)
+	on duplicate key update
+		`count` = `count` + param_count;
+end;;
+
+create procedure `basket_update`(in param_userid int, in param_productid int, in param_count int)
+begin
+	update
+		`basket` `b`
+	set
+		`b`.`count` = param_count
+	where
+		`b`.`user_id` = param_userid
+        and `b`.`product_id` = param_productid;
+end;;
+
+create procedure `basket_count`(in param_userid int, in param_productid int)
+begin
+	select
+        `u`.`id`,
+		ifnull(`b`.`count`, 0) as 'count'
+	from
+		`user` `u`
+	left join
+		`basket` `b` on `b`.`user_id` = `u`.`id` and `b`.`product_id` = param_productid
+	where
+		`u`.`id` = param_userid;
+end;;
 
 create procedure `product_filters_fish`()
 begin
