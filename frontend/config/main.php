@@ -34,6 +34,12 @@ return [
                     'suffix' => '/',
                 ],
                 'user/basket' => 'site/basket',
+                [
+                    'class' => 'yii\web\UrlRule',
+                    'pattern' => 'user/buy/<id:\d+>',
+                    'route' => 'site/buyview',
+                    'suffix' => '.html',
+                ],
                 'user/buy' => 'site/buy',
                 'user/signup' => 'site/signup',
                 'user/logout' => 'site/logout',

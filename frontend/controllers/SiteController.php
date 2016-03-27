@@ -297,4 +297,14 @@ class SiteController extends Controller
             'buyList' => $buyList,
         ]);
     }
+
+    public function actionBuyview() {
+        $buyviewList = Yii::$app->db->createCommand('call buy_view(:user_id,:trade_id)')
+            ->bindValue(':user_id',Yii::$app->user->identity->id)
+            ->bindValue(':trade_id',(int)Yii::$app->request->get('id'))
+            ->queryAll();
+        return $this->render('buyview', [
+            'list' => $buyviewList
+        ]);
+    }
 }

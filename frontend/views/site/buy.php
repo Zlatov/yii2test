@@ -15,7 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php foreach ($buyList as $buy): ?>
 	<div class="row">
 		<div class="col-sm-12">
-			<p>Покупка совершена <strong><?= Text::tsToStr($buy['trade_ts']) ?></strong>, куплено <strong><?= $buy['count_product'] ?></strong> различных товаров, общее количество <strong><?= $buy['count_units'] ?></strong> на сумму <strong><?= $buy['total_price'] ?></strong> &#8381;.</p>
+			<p><a href="<?= Url::to(["site/buyview","id"=>$buy['id']]) ?>">Покупка</a> 
+			совершена <strong><?= Text::tsToStr($buy['trade_ts']) ?></strong>, 
+			куплено <strong><?= $buy['count_product'] ?></strong> различных товаров, 
+			общее количество <strong><?= $buy['count_units'] ?></strong> 
+			на сумму <strong><?= $buy['total_price'] ?></strong> &#8381;.</p>
 		</div>
 	</div>
 <?php endforeach ?>
