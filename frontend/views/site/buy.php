@@ -1,4 +1,5 @@
 <?php
+
 use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
@@ -11,7 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h1><?= Html::encode($this->title) ?></h1>
 
-
 <?php foreach ($buyList as $buy): ?>
 	<div class="row">
 		<div class="col-sm-12">
@@ -19,15 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 <?php endforeach ?>
-
-<p><?= Text::tsToStr('2016-03-19 16:15:30') ?></p>
-<p><?= Text::tsToStr('2016-03-19 16:15:25') ?></p>
-<p><?= Text::tsToStr('2016-03-19 16:14:30') ?></p>
-<p><?= Text::tsToStr('2016-03-19 15:15:30') ?></p>
-<p><?= Text::tsToStr('2016-03-18 16:15:30') ?></p>
-<p><?= Text::tsToStr('2016-02-19 16:15:30') ?></p>
-<p><?= Text::tsToStr('2015-02-19 16:15:30') ?></p>
-
 
 <?php if (count($buyList)===1 && $buyList[0]['count_product']==='0'): ?>
 	<p>У вас нет совершенных покупок.</p>

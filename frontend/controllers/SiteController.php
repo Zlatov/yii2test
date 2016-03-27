@@ -267,7 +267,7 @@ class SiteController extends Controller
     {
         if (Yii::$app->request->isPost)
         {
-            if ((Yii::$app->request->post('buy') !== null) && ((integer)Yii::$app->request->post('user_id') === Yii::$app->user->identity->id))
+            if ((Yii::$app->request->post('buy') !== null) && (Yii::$app->request->post('user_id') === (string)Yii::$app->user->identity->id))
             {
                 $basket = Yii::$app->db->createCommand('call basket_list(:user_id)')
                     ->bindValue(':user_id',Yii::$app->user->identity->id)
