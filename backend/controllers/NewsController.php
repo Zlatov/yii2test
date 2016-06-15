@@ -83,8 +83,8 @@ class NewsController extends Controller
         $model = $this->findModel($id);
         $section = SecNews::find()->select(['header'])->where(['id'=>$model->sec])->all();
         // echo "<pre>";
-        // print_r($model->sec);
-        // die;
+        // print_r($model->updated_at);
+        // die();
         return $this->render('view', [
             'model' => $model,
             'sectionheader' => $section[0]->header,

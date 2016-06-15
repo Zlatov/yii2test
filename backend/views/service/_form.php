@@ -24,6 +24,15 @@ use common\models\SecService;
     <!--<?// = $form->field($model, 'secSers')->checkboxList($secServiceList) ?>-->
     <!-- или -->
     <?php //= $form->field($model, 'secSers')->dropDownList($secServiceList,['multiple' => 'true','size'=>15]) ?>
+
+<?php  
+echo "<pre>";
+print_r($model);
+echo "</pre>";
+die();
+
+?>
+
     <?= $form->field($model, 'sectionsId')->dropDownList($secServiceList,['multiple' => 'true','size'=>15]) ?>
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>

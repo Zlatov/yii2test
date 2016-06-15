@@ -67,7 +67,7 @@ class Service extends \yii\db\ActiveRecord
         ];
     }
 
-    protected $sectionsId = [];
+    public $sectionsId = [];
 
     public function getSectionsId()
     {

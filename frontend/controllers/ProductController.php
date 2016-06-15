@@ -21,28 +21,28 @@ class ProductController extends Controller
 				'class' => AccessControl::className(),
 				// 'only' => ['view'],
 				'rules' => [
-					// [
-					//     'actions' => ['index'],
-					//     'allow' => true,
-					//     'roles' => ['user'],
-					// ],
-					// [
-					//     'actions' => ['index', 'list'],
-					//     'allow' => true,
-					//     'roles' => ['moder'],
-					// ],
-					// [
-					//     'allow' => true,
-					//     'roles' => ['admin'],
-					// ],
 					[
-						'allow' => true,
-						'roles' => ['?'],
+					    'actions' => ['index'],
+					    'allow' => true,
+					    'roles' => ['user'],
 					],
 					[
-						'allow' => true,
-						'roles' => ['@'],
+					    'actions' => ['index', 'list'],
+					    'allow' => true,
+					    'roles' => ['moder'],
 					],
+					[
+					    'allow' => true,
+					    'roles' => ['admin'],
+					],
+					// [
+					// 	'allow' => true,
+					// 	'roles' => ['?'],
+					// ],
+					// [
+					// 	'allow' => true,
+					// 	'roles' => ['@'],
+					// ],
 					// [
 					//     'actions' => ['view'],
 					//     'allow' => true,
